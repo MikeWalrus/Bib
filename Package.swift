@@ -9,7 +9,12 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Bib",
-            targets: ["Bib"]),
+            targets: ["Bib"])
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/yaslab/CSV.swift.git",
+            .upToNextMinor(from: "2.4.3"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
