@@ -1,4 +1,6 @@
-enum Type: String {
+import Foundation
+
+enum Type: String, Codable {
     case article
     case inproceedings
 
@@ -12,7 +14,7 @@ enum Type: String {
     }
 }
 
-struct Entry {
+struct Entry: Codable, Equatable {
     let type: Type
     let title: String
     let year: Int
@@ -55,6 +57,15 @@ struct Entry {
         ret += "}\n"
         return ret
     }
+
+    func toCsvRow() -> String {
+        return
+            "\"\(type)\",\"\(title)\",\"\(year)\",\"\(containerTitle)\",\"\(author)\",\"\(url ?? "")\",\"\(doi ?? "")\",\"\(page ?? "")\",\"\(volume ?? "")\""
+    }
+
+    static func csvHeader() -> String {
+        return "Type,Title,Year,ContainerTitle,Author,URL,DOI,Page,Volume"
+    }
 }
 
 enum OutputFormat: CaseIterable {
@@ -64,11 +75,17 @@ enum OutputFormat: CaseIterable {
     case gbt7714
 }
 
-func export(entry: [Entry], to: OutputFormat) -> String {
+func export(entries: [Entry], to: OutputFormat) -> String {
     switch to {
     case .bibtex:
-        return entry.map { $0.toBibtex() }.joined(separator: "\n")
+        return entries.map { $0.toBibtex() }.joined(separator: "\n")
+    case .csv:
+        return Entry.csvHeader() + "\n"
+            + entries.map { $0.toCsvRow() }.joined(separator: "\n")
+    case .json:
+        return try! String(
+            data: JSONEncoder().encode(entries), encoding: .utf8)!
     default:
-        return ""
+        return "Not implemented"
     }
 }

@@ -11,11 +11,6 @@ let package = Package(
             name: "Bib",
             targets: ["Bib"])
     ],
-    dependencies: [
-        .package(
-            url: "https://github.com/yaslab/CSV.swift.git",
-            .upToNextMinor(from: "2.4.3"))
-    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.

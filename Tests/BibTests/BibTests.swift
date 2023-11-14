@@ -73,4 +73,16 @@ final class BibTests: XCTestCase {
         try validateWithBiber(entry: string)
         XCTAssertEqual(string, result)
     }
+
+    func testJson() throws {
+        let entry = Entry(
+            type: .article, title: "Some Title", year: 2023,
+            containerTitle: "Some Book", author: ["John Appleseed"],
+            url: "www.example.org", doi: nil, page: "1", volume: "1")
+        let string = export(entries: [entry], to: .json)
+        let data = Data(string.utf8)
+        let decoder = JSONDecoder()
+        let decoded = try decoder.decode([Entry].self, from: data)
+        XCTAssertEqual(decoded, [entry])
+    }
 }
