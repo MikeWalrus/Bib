@@ -66,6 +66,29 @@ struct Entry: Codable, Equatable {
     static func csvHeader() -> String {
         return "Type,Title,Year,ContainerTitle,Author,URL,DOI,Page,Volume"
     }
+
+    func toGbT7714() -> String {
+        var ret: String = ""
+        return ret
+    }
+
+    func gbt7714Author() -> String {
+        let authors = self.author.prefix(3)
+        var ret = authors.map {
+            let names = $0.split(separator: " ")
+            if names.count <= 1 {
+                return $0
+            }
+            let firstName = names.first!
+            let lastName = names.last!
+            return lastName + String(firstName.prefix(1))
+        }.joined(separator: ",")
+        if author.count > 3 {
+            return ret + ",等"
+        }
+        ret += "."
+        return ret
+    }
 }
 
 enum OutputFormat: CaseIterable {
@@ -85,7 +108,8 @@ func export(entries: [Entry], to: OutputFormat) -> String {
     case .json:
         return try! String(
             data: JSONEncoder().encode(entries), encoding: .utf8)!
-    default:
-        return "Not implemented"
+    case .gbt7714:
+        return entries.enumerated().map { "[\($0 + 1)]" + $1.toGbT7714() }
+            .joined(separator: "\n")
     }
 }
