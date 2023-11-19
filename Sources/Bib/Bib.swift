@@ -25,6 +25,28 @@ public struct Entry: Codable, Equatable {
     let page: String?
     let volume: String?
 
+    public init(
+        type: Type,
+        title: String,
+        year: Int,
+        containerTitle: String,
+        author: [String],
+        url: String?,
+        doi: String?,
+        page: String?,
+        volume: String?
+    ) {
+        self.type = type
+        self.title = title
+        self.year = year
+        self.containerTitle = containerTitle
+        self.author = author
+        self.url = url
+        self.doi = doi
+        self.page = page
+        self.volume = volume
+    }
+
     func toBibtex() -> String {
         var ret: String = ""
         let keyAuthor =
