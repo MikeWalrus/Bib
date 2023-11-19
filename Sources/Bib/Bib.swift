@@ -110,11 +110,11 @@ struct Entry: Codable, Equatable {
     }
 }
 
-enum OutputFormat: CaseIterable {
-    case bibtex
-    case json
-    case csv
-    case gbt7714
+enum OutputFormat: String, CaseIterable {
+    case bibtex = "BibTeX"
+    case json = "JSON"
+    case csv = "CSV"
+    case gbt7714 = "GB/T 7714"
 }
 
 func export(entries: [Entry], to: OutputFormat) -> String {
