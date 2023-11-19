@@ -68,7 +68,16 @@ struct Entry: Codable, Equatable {
     }
 
     func toGbT7714() -> String {
-        var ret: String = ""
+        let author = gbt7714Author()
+        let type = gbt7714Type()
+        var ret =
+            "\(author) \(title) \(type). \(containerTitle), \(year): \(page ?? "")."
+        if let url = url {
+            ret += " \(url) ."
+        }
+        if let doi = doi {
+            ret += " \(doi) ."
+        }
         return ret
     }
 
@@ -81,13 +90,23 @@ struct Entry: Codable, Equatable {
             }
             let firstName = names.first!
             let lastName = names.last!
-            return lastName + String(firstName.prefix(1))
-        }.joined(separator: ",")
+            return lastName + " " + String(firstName.prefix(1))
+        }.joined(separator: ", ")
         if author.count > 3 {
-            return ret + ",等"
+            return ret + ", 等"
         }
         ret += "."
         return ret
+    }
+
+    func gbt7714Type() -> String {
+        let ol = (self.url != nil) ? "/OL" : ""
+        switch type {
+        case .article:
+            return "［J\(ol)］"
+        case .inproceedings:
+            return "［C\(ol)］"
+        }
     }
 }
 
@@ -109,7 +128,7 @@ func export(entries: [Entry], to: OutputFormat) -> String {
         return try! String(
             data: JSONEncoder().encode(entries), encoding: .utf8)!
     case .gbt7714:
-        return entries.enumerated().map { "[\($0 + 1)]" + $1.toGbT7714() }
+        return entries.enumerated().map { "［\($0 + 1)］" + $1.toGbT7714() }
             .joined(separator: "\n")
     }
 }

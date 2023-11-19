@@ -85,4 +85,17 @@ final class BibTests: XCTestCase {
         let decoded = try decoder.decode([Entry].self, from: data)
         XCTAssertEqual(decoded, [entry])
     }
+
+    func testGbt7714() {
+        let entry = Entry(
+            type: .article, title: "Some Title", year: 2023,
+            containerTitle: "Some Book", author: ["John Appleseed"],
+            url: "www.example.org", doi: nil, page: "1", volume: "1")
+        let string = export(entries: [entry], to: .gbt7714)
+        XCTAssertEqual(
+            string,
+            """
+            ［1］Appleseed J. Some Title ［J/OL］. Some Book, 2023: 1. www.example.org .
+            """)
+    }
 }
