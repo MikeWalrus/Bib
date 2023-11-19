@@ -1,6 +1,6 @@
 import Foundation
 
-enum Type: String, Codable {
+public enum Type: String, Codable {
     case article
     case inproceedings
 
@@ -14,7 +14,7 @@ enum Type: String, Codable {
     }
 }
 
-struct Entry: Codable, Equatable {
+public struct Entry: Codable, Equatable {
     let type: Type
     let title: String
     let year: Int
@@ -110,14 +110,14 @@ struct Entry: Codable, Equatable {
     }
 }
 
-enum OutputFormat: String, CaseIterable {
+public enum OutputFormat: String, CaseIterable {
     case bibtex = "BibTeX"
     case json = "JSON"
     case csv = "CSV"
     case gbt7714 = "GB/T 7714"
 }
 
-func export(entries: [Entry], to: OutputFormat) -> String {
+public func export(entries: [Entry], to: OutputFormat) -> String {
     switch to {
     case .bibtex:
         return entries.map { $0.toBibtex() }.joined(separator: "\n")
